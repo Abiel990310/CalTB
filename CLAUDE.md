@@ -3,8 +3,10 @@
 An interactive **AP Calculus AB/BC** textbook, in the same family as CppTB,
 JavaTB and CsaTB.
 
-**Nothing is built yet** — not the engine, not a chapter. `docs/ROADMAP.md`
-holds the plan and the order.
+**The math verifier exists; nothing else does yet.** `npm run verify` runs the
+checker's own self-test and then every mathematical claim in `content/`. There
+is no site engine and no chapter. `docs/ROADMAP.md` holds the order;
+`docs/AUTHORING.md` documents how a claim is written and proved.
 
 ## What makes this book different from the others
 
@@ -22,8 +24,20 @@ shared with PhysTB — build it once, in a portable shape.
 ## The one rule, restated for this book
 
 Nothing ships unverified. Every derivative, integral, limit and series in the
-prose is checked by a program. If a result cannot be checked, write the checker
-or delete the result.
+prose is checked by a program:
+
+```bash
+npm run setup      # installs SymPy, once
+npm run verify     # self-test, then every claim in content/
+```
+
+A claim SymPy cannot decide comes back `unproved` and **fails the build**. That
+is deliberate: it does not mean the claim is false, it means the book would be
+asserting something no program can check, which is the thing this family exists
+not to do. Rewrite it so it checks, or cut it.
+
+The checker has its own test and it runs first, because a change that stopped it
+catching false mathematics would otherwise look exactly like a green build.
 
 ## Settled decisions — do not relitigate
 

@@ -35,11 +35,16 @@ CppTB's rule — *if a claim cannot be demonstrated by a program that runs, writ
 the program or delete the claim* — needs a new machine here, because there is no
 compiler to lean on.
 
-- [ ] **A symbolic verifier.** `npm run verify:math`, the analogue of compiling.
-      Every worked result in the prose is checked by SymPy: the book claims
-      ∫x·eˣ dx = eˣ(x−1)+C, and the verifier differentiates that and compares it
-      against the integrand. Same for every limit, derivative and series.
-      A chapter whose mathematics does not check does not build.
+- [x] **A symbolic verifier.** `npm run verify:math`, the analogue of compiling.
+      Done 2026-09-14. Five claim forms (derivative, integral, limit, series,
+      identity) in ```math verify blocks; SymPy decides each. Integrals are
+      checked by differentiating the claimed antiderivative, so `+ C` is handled
+      by the definition rather than by a special case. Three verdicts, and the
+      third is the point: a claim SymPy cannot decide is reported `unproved` and
+      fails the build, because the book may not assert what no program can
+      check. The checker has its own test (`verify:selftest`, 18 cases) that
+      runs first — a change that stopped it catching false mathematics would
+      otherwise look like a green build. See `docs/AUTHORING.md`.
 - [ ] **Symbolic answer grading.** A reader types `e^x(x-1)+C` and SymPy decides
       equivalence to the reference, up to the constant of integration. String
       matching is not acceptable here — a grader that rejects a correct answer
