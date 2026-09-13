@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice problems · The Java Textbook</title>
+  <meta name="description" content="Auto-graded Java practice problems, filterable by topic and difficulty.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/CalTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/CalTB/assets/index-DU6-oSWJ.css">
+</head>
+<body class="">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/CalTB/">The Java Textbook</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/CalTB/">Start here</a>
+    <a class="sidebar__link" href="/CalTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/CalTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/CalTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose prose--wide">
+    <h1>Practice problems</h1>
+    <p class="chapter-lede">Each problem gives you a starting file and a hidden test that compiles against your code. Write, run, and the page tells you exactly which assertion failed. Progress is stored in this browser.</p>
+
+    <div class="filters">
+      <div class="filters__row">
+        <span class="filters__label">Difficulty</span>
+        <button class="chip is-on" data-filter-difficulty="all">All</button>
+        <button class="chip" data-filter-difficulty="intro">Warm-up</button><button class="chip" data-filter-difficulty="core">Core</button><button class="chip" data-filter-difficulty="stretch">Stretch</button><button class="chip" data-filter-difficulty="deep">Deep end</button>
+      </div>
+      <div class="filters__row">
+        <span class="filters__label">Topic</span>
+        <button class="chip is-on" data-filter-topic="all">All</button>
+        
+      </div>
+    </div>
+
+    <ul class="problems" id="problem-list"></ul>
+    <p class="problems__empty" id="problem-empty" hidden>No problems match those filters yet.</p>
+  </article>
+    </main>
+    <div class="rail" aria-hidden="true"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/CalTB/assets/index-Cigx_HbD.js"></script>
+</body>
+</html>
