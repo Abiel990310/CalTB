@@ -11,11 +11,13 @@ is no site engine and no chapter. `docs/ROADMAP.md` holds the order;
 ## What makes this book different from the others
 
 The compiled books lean on a compiler: a claim is true because the program runs.
-There is no compiler here, so the equivalent machine has to be built —
-**SymPy checking every worked result**, and symbolic equivalence grading
-answers. Until `npm run verify:math` exists, this book cannot honour the rule
-the rest of the family is built on, which is why it is the first item in the
-roadmap and not an afterthought.
+There is no compiler here, so the equivalent machine had to be built — **SymPy
+checking every worked result**. That part is done, and it is what lets this book
+honour the family's rule at all.
+
+What is still missing is the other half: **symbolic equivalence grading**, so a
+reader's answer is judged by what it means rather than how it is spelled. Until
+that exists there are no problems, only prose.
 
 The other half is that a calculus idea is often best shown by a graph the reader
 can *move*: drag *h* → 0 and watch the secant become the tangent. That widget is
