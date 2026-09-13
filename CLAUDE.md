@@ -1,0 +1,65 @@
+# CalTB — working notes for Claude
+
+An interactive **AP Calculus AB/BC** textbook, in the same family as CppTB,
+JavaTB and CsaTB.
+
+**Nothing is built yet** — not the engine, not a chapter. `docs/ROADMAP.md`
+holds the plan and the order.
+
+## What makes this book different from the others
+
+The compiled books lean on a compiler: a claim is true because the program runs.
+There is no compiler here, so the equivalent machine has to be built —
+**SymPy checking every worked result**, and symbolic equivalence grading
+answers. Until `npm run verify:math` exists, this book cannot honour the rule
+the rest of the family is built on, which is why it is the first item in the
+roadmap and not an afterthought.
+
+The other half is that a calculus idea is often best shown by a graph the reader
+can *move*: drag *h* → 0 and watch the secant become the tangent. That widget is
+shared with PhysTB — build it once, in a portable shape.
+
+## The one rule, restated for this book
+
+Nothing ships unverified. Every derivative, integral, limit and series in the
+prose is checked by a program. If a result cannot be checked, write the checker
+or delete the result.
+
+## Settled decisions — do not relitigate
+
+- **One book, not two.** BC is AB plus more, so a `scope: ab | bc` tag on every
+  chapter and problem serves both. Two repos would duplicate eighty per cent of
+  the content. The tag must be there from chapter one.
+- **Problems are original.** College Board questions are copyrighted; write to
+  the archetypes, never transcribe.
+- **Not an official College Board product**, and nothing may imply otherwise.
+
+## Before writing any chapter
+
+`docs/ROADMAP.md` opens with an unticked item: check the unit list against the
+current CED. What is in there was written from knowledge, not from the published
+document. Do that first.
+
+## Scheduling
+
+Covered by **`trig_017zYznE5wwj44ZGRirzmBRL`**, the shared 07:00 UTC+8 routine.
+One item per run. Do not create a second Routine.
+
+**Pushing `main` deploys** to https://abiel990310.github.io/CalTB/ once the
+engine and its workflow are in place.
+
+## When porting the engine
+
+Take it from CsaTB or JavaTB, and carry these across deliberately:
+
+- The **search index must use `url()`** from `build/base.ts`, never a raw
+  `/part/chapter/`. These sites are served from `/<repo>/` and a raw path 404s —
+  invisibly, since `npm run dev` serves from `/`. That bug shipped in two books
+  before it was caught.
+- **Per-site localStorage keys.** All these sites share the `abiel990310.github.io`
+  origin, so a generic progress key would let one book overwrite another's.
+- **Theme key: use `tb-theme`.** Progress must stay per-book, but the theme is
+  worth sharing, so a reader's choice follows them across the family. JavaTB
+  already uses `tb-theme`; CppTB still uses `cpptb-theme` and should be aligned
+  when someone is next in that file. This is a convention being adopted, not one
+  already in place everywhere.
