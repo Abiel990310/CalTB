@@ -1,5 +1,6 @@
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
+import katexPlugin from '@vscode/markdown-it-katex';
 import { createHighlighter, type Highlighter } from 'shiki';
 import type { Heading } from './types.ts';
 import { LANGUAGE } from './language.ts';
@@ -182,6 +183,35 @@ export async function createRenderer(): Promise<(src: string) => RenderResult> {
   const highlighter = await getHighlighter();
 
   const md = new MarkdownIt({ html: true, linkify: true, typographer: true });
+
+  /**
+   * Mathematics is typeset, not spelled out.
+   *
+   * `$x^2$` inline and `$$ … $$` as a display block. KaTeX renders these at
+   * build time, so the published page carries finished HTML and MathML — no
+   * client-side library, no flash of raw LaTeX before it resolves, and a
+   * screen reader gets the MathML rather than a pile of backslashes.
+   *
+   * `throwOnError` is on deliberately. A mis-typed formula should stop the
+   * build with the source in the message, the same way a mathematical claim
+   * that does not check stops it. The alternative is KaTeX quietly rendering
+   * the broken source in red on the live page, which is how a chapter ships
+   * looking wrong.
+   */
+  // The package is CJS with a `default` wrapper, while its type declarations
+  // describe a bare function. Both are true depending on how it is loaded, so
+  // take whichever is actually callable rather than trusting either.
+  const katex = (
+    typeof katexPlugin === 'function'
+      ? katexPlugin
+      : (katexPlugin as unknown as { default: typeof katexPlugin }).default
+  ) as Parameters<MarkdownIt['use']>[0];
+
+  md.use(katex, {
+    throwOnError: true,
+    strict: false,
+    output: 'htmlAndMathml',
+  });
   md.use(containerPlugin);
 
   let headings: Heading[] = [];

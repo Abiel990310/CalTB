@@ -1,3 +1,4 @@
+@import "katex/dist/katex.min.css";
 @import "./tokens.css";
 @import "./layout.css";
 @import "./prose.css";
@@ -91,3 +92,18 @@
   color: #c0392b;
   font-size: 0.9rem;
 }
+
+
+/* ---- Typeset mathematics ------------------------------------------------ */
+
+.katex { font-size: 1.05em; }
+
+.katex-display {
+  margin: 20px 0;
+  padding: 4px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* A long equation scrolls inside its own box rather than widening the page. */
+.katex-display > .katex { text-align: center; }

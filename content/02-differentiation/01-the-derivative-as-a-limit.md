@@ -52,20 +52,14 @@ is the value the answer is heading towards.**
 
 ## The difference quotient
 
-For a function *f* and a point *a*, the slope of the secant through
-(*a*, *f*(*a*)) and (*a*+*h*, *f*(*a*+*h*)) is
+For a function $f$ and a point $a$, the slope of the secant through
+$(a,\,f(a))$ and $(a+h,\,f(a+h))$ is
 
-```
-f(a + h) - f(a)
----------------
-       h
-```
+$$\frac{f(a + h) - f(a)}{h}$$
 
-and the derivative is what that approaches as *h* → 0:
+and the derivative is what that approaches as $h \to 0$:
 
-```
-f'(a) = lim(h→0)  [ f(a + h) - f(a) ] / h
-```
+$$f'(a) \;=\; \lim_{h \to 0} \frac{f(a + h) - f(a)}{h}$$
 
 Every derivative rule you will meet is a shortcut for this limit. They are
 worth knowing, and they are not worth mistaking for the definition — a rule
@@ -73,21 +67,20 @@ tells you the answer, and the definition tells you what the answer *means*.
 
 ## Doing it by hand, once
 
-Take *f*(*x*) = *x*², at *a* = 1. Expand:
+Take $f(x) = x^2$, at $a = 1$. Expand:
 
-```
-(1 + h)² - 1²      1 + 2h + h² - 1      2h + h²
---------------  =  ----------------  =  --------  =  2 + h
-      h                   h                h
-```
+$$\frac{(1+h)^2 - 1^2}{h}
+ \;=\; \frac{1 + 2h + h^2 - 1}{h}
+ \;=\; \frac{2h + h^2}{h}
+ \;=\; 2 + h$$
 
-That last cancellation is the entire trick. Before it, the expression is 0/0 at
-*h* = 0 and tells you nothing. After it, the expression is `2 + h`, which is
-perfectly well behaved at *h* = 0 and says 2.
+That last cancellation is the entire trick. Before it, the expression is
+$\tfrac{0}{0}$ at $h = 0$ and tells you nothing. After it, the expression is
+$2 + h$, which is perfectly well behaved at $h = 0$ and says $2$.
 
-The two expressions are equal **everywhere except at h = 0**, and the limit only
-cares about what happens near zero, not at it. That is why the cancellation is
-legitimate.
+The two expressions are equal **everywhere except at $h = 0$**, and the limit
+only cares about what happens near zero, not at it. That is why the cancellation
+is legitimate.
 
 ```math verify
 (1 + h)**2 - 1 = 2*h + h**2
@@ -95,18 +88,18 @@ lim h->0 ((1 + h)**2 - 1)/h = 2
 d/dx x**2 = 2*x
 ```
 
-The third line is the general result: the slope at *a* is 2*a*, which at *a* = 1
-is 2 — the number the widget above was creeping towards.
+The third line is the general result: the slope at $a$ is $2a$, which at
+$a = 1$ is $2$ — the number the widget above was creeping towards.
 
 ## Why the limit is not optional
 
 It is tempting to read the difference quotient as "the slope when *h* is very
 small" and skip the limit. Two things go wrong.
 
-**The first is that "very small" is not a number.** Any *h* you pick gives a
+**The first is that "very small" is not a number.** Any $h$ you pick gives a
 secant, not a tangent, and the answer it gives is wrong by an amount you have
-chosen not to measure. For *x*² at 1 the secant slope is exactly `2 + h` — so
-picking *h* = 0.001 gives 2.001, and the error is not a rounding artefact but
+chosen not to measure. For $x^2$ at $1$ the secant slope is exactly $2 + h$ — so
+picking $h = 0.001$ gives $2.001$, and the error is not a rounding artefact but
 the actual answer to a slightly different question.
 
 **The second is that the limit can exist when no single small value is right.**
@@ -118,27 +111,27 @@ lim h->0 (cos(h) - 1)/h = 0
 lim h->0 (exp(h) - 1)/h = 1
 ```
 
-Those three are the derivative of sin, cos and exp at zero, each computed
-straight from the definition, and none of them simplifies by cancelling a factor
-of *h*. There is no algebra that makes `sin(h)/h` into something defined at
-zero — the limit is the only route to the answer.
+Those three are the derivatives of $\sin$, $\cos$ and $\exp$ at zero, each
+computed straight from the definition, and none of them simplifies by cancelling
+a factor of $h$. There is no algebra that turns $\tfrac{\sin h}{h}$ into
+something defined at zero — the limit is the only route to the answer.
 
 ## Where it fails
 
 A derivative is a limit, and a limit need not exist. Three ways a function can
 have no derivative at a point:
 
-- **A corner.** |*x*| at 0: approach from the right and the secant slope is 1,
-  from the left it is −1. The two one-sided limits disagree, so there is no
-  limit and no derivative — even though the function is perfectly continuous.
-- **A vertical tangent.** The cube root of *x* at 0: the secant slope grows
-  without bound. The tangent line exists geometrically; its slope does not
-  exist as a number.
+- **A corner.** $|x|$ at $0$: approach from the right and the secant slope is
+  $1$, from the left it is $-1$. The two one-sided limits disagree, so there is
+  no limit and no derivative — even though the function is perfectly continuous.
+- **A vertical tangent.** $\sqrt[3]{x}$ at $0$: the secant slope grows without
+  bound. The tangent line exists geometrically; its slope does not exist as a
+  number.
 - **A discontinuity.** If the function jumps, the difference quotient does not
   settle. Differentiability implies continuity, and this is the contrapositive.
 
 The first is the one worth remembering, because it separates two ideas students
-routinely fuse: **continuous does not mean smooth.** |*x*| has no break in it
+routinely fuse: **continuous does not mean smooth.** $|x|$ has no break in it
 and still has no derivative at the origin.
 
 ```math verify
@@ -148,7 +141,7 @@ abs(h)/h = abs(h)/h    # true but useless: the two-sided limit is what fails
 That last line is deliberately vacuous, and it is in the chapter to make a
 point about this book's own machinery: the checker will confirm an identity
 that says nothing. **A verified claim is not automatically a meaningful one.**
-What fails for |*x*| is not an identity but the existence of a two-sided limit,
+What fails for $|x|$ is not an identity but the existence of a two-sided limit,
 and that is a fact about limits rather than an equation to check.
 
 :::quiz
@@ -181,14 +174,14 @@ and that is a fact about limits rather than an equation to check.
 
 :::recap
 - A slope needs two points; the difference quotient supplies a second one at
-  distance *h* and then removes it by taking a limit.
-- `f'(a) = lim(h→0) [f(a+h) − f(a)] / h`. Every differentiation rule is a
-  shortcut for this, and none of them replaces it.
+  distance $h$ and then removes it by taking a limit.
+- $f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h}$. Every differentiation rule
+  is a shortcut for this, and none of them replaces it.
 - The cancellation that makes the quotient computable is legal because the two
-  expressions agree everywhere except at *h* = 0, and the limit does not look
-  at *h* = 0.
-- The limit is not a stand-in for "a very small *h*". For sin(*h*)/*h* there is
-  no algebra to cancel and no small value that is correct.
-- Continuous does not mean differentiable: |*x*| is continuous at 0 and has no
+  expressions agree everywhere except at $h = 0$, and the limit does not look
+  at $h = 0$.
+- The limit is not a stand-in for "a very small $h$". For $\tfrac{\sin h}{h}$
+  there is no algebra to cancel and no small value that is correct.
+- Continuous does not mean differentiable: $|x|$ is continuous at $0$ and has no
   derivative there, because the one-sided slopes disagree.
 :::
