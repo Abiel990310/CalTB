@@ -20,7 +20,7 @@ tells you how fast the other must.
 
 The technique is one idea: **differentiate the relationship with respect to
 time.** Every variable becomes a rate via the chain rule, which is why chapter
-2.3 was worth the effort.
+3.1 was worth the effort.
 
 ## The method
 

@@ -10,14 +10,15 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "setup": "python3 -m pip install --quiet sympy",
-    "verify": "npm run typecheck && npm run verify:selftest && npm run verify:grading && npm run verify:answer:selftest && npm run verify:math && npm run verify:problems && npm run verify:browser",
+    "verify": "npm run typecheck && npm run verify:selftest && npm run verify:grading && npm run verify:answer:selftest && npm run verify:math && npm run verify:problems && npm run verify:refs && npm run verify:browser",
     "verify:math": "node --no-warnings --experimental-strip-types scripts/verify-math.ts",
     "verify:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-math.ts",
     "math:latex": "node --no-warnings --experimental-strip-types scripts/build-math-latex.ts",
     "verify:grading": "node --no-warnings --experimental-strip-types scripts/verify-grading.ts",
     "verify:problems": "node --no-warnings --experimental-strip-types scripts/verify-exercises.ts",
     "verify:answer:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-answer.ts",
-    "verify:browser": "node --no-warnings --experimental-strip-types scripts/verify-browser-grading.ts"
+    "verify:browser": "node --no-warnings --experimental-strip-types scripts/verify-browser-grading.ts",
+    "verify:refs": "node --no-warnings --experimental-strip-types scripts/verify-references.ts"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
