@@ -3,10 +3,11 @@
 An interactive **AP Calculus AB/BC** textbook, in the same family as CppTB,
 JavaTB and CsaTB.
 
-**The math verifier exists; nothing else does yet.** `npm run verify` runs the
-checker's own self-test and then every mathematical claim in `content/`. There
-is no site engine and no chapter. `docs/ROADMAP.md` holds the order;
-`docs/AUTHORING.md` documents how a claim is written and proved.
+**Twelve chapters written, 136 claims checked.** Units 1, 2, 6 and 7 are
+complete; 3, 4, 5 and the BC series unit are partly done. The site engine,
+KaTeX typesetting and three graph presets (secant, riemann, taylor) are in
+place. `docs/ROADMAP.md` holds what is left; `docs/AUTHORING.md` documents how a
+claim is written and proved.
 
 ## What makes this book different from the others
 

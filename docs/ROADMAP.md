@@ -72,16 +72,16 @@ compiler to lean on.
 
 To be confirmed against the CED. AB unless marked.
 
-- [ ] 1 Limits and continuity
-- [ ] 2 Differentiation: definition and basic rules
-- [ ] 3 Differentiation: composite, implicit, and inverse functions
-- [ ] 4 Contextual applications of differentiation
-- [ ] 5 Analytical applications of differentiation
-- [ ] 6 Integration and accumulation of change
-- [ ] 7 Differential equations
+- [x] 1 Limits and continuity
+- [x] 2 Differentiation: definition and basic rules
+- [~] 3 Differentiation: composite, implicit, and inverse functions — chain rule done, implicit and inverse outstanding
+- [~] 4 Contextual applications of differentiation — related rates done
+- [~] 5 Analytical applications of differentiation — extrema and shape done
+- [x] 6 Integration and accumulation of change
+- [x] 7 Differential equations
 - [ ] 8 Applications of integration
 - [ ] 9 Parametric, polar, and vector-valued functions — **BC**
-- [ ] 10 Infinite sequences and series — **BC**
+- [~] 10 Infinite sequences and series — **BC** — convergence and Taylor done
 
 ## Rules specific to this book
 
