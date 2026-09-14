@@ -50,15 +50,16 @@ compiler to lean on.
       matching is not acceptable here — a grader that rejects a correct answer
       written differently is worse than no grader, because readers stop
       believing it.
-- [ ] **An interactive graph widget.** The highest-value thing in the book, and
-      shared with PhysTB, so build it to be ported. It must be something the
-      reader moves, not a picture:
-      - drag *h* → 0 and watch a secant become the tangent
-      - drag *n* on a Riemann sum, toggling left / right / midpoint / trapezoid,
-        and watch which one converges faster
-      - add Taylor terms and watch the polynomial hug the curve, then fall apart
-        outside the radius of convergence
-      - slope fields with a draggable initial condition tracing its solution
+- [x] **An interactive graph widget.** Done 2026-09-14. `:::graph` blocks, two
+      kinds so far, deliberately preset rather than a general plotter — one
+      preset that does a thing exactly right beats a configurable one that does
+      four adequately.
+      - [x] `secant` — drag *h* → 0 and watch the slope settle
+      - [x] `riemann` — drag *n*, toggle left / right / midpoint / trapezoid,
+            with the error against the exact value when the spec gives one
+      - [ ] `taylor` — add terms, watch it hug the curve then fail outside the
+            radius of convergence
+      - [ ] `slopefield` — a draggable initial condition tracing its solution
 - [ ] **MCQ and free-response problem shapes.** The quiz widget ports from
       JavaTB unchanged, including the rule that every wrong option needs a
       `why`. Free response needs part-by-part entry and **rubric-point

@@ -80,7 +80,7 @@ function splitHidden(source: string): { shown: string; full: string } {
  * as Markdown; raw containers (memviz, exercise) keep their body verbatim so
  * the client can parse it.
  */
-const RAW_CONTAINERS = new Set(['memviz', 'exercise', 'quiz']);
+const RAW_CONTAINERS = new Set(['memviz', 'exercise', 'quiz', 'graph']);
 const PROSE_CONTAINERS: Record<string, { label: string; cls: string }> = {
   note: { label: 'Note', cls: 'note' },
   tip: { label: 'Tip', cls: 'tip' },
@@ -153,6 +153,9 @@ function containerPlugin(md: MarkdownIt): void {
     }
     if (name === 'exercise') {
       return `<tb-exercise data-id="${escapeHtml(args)}"></tb-exercise>\n`;
+    }
+    if (name === 'graph') {
+      return `<tb-graph><template data-role="spec">${escapeHtml(body ?? '')}</template></tb-graph>\n`;
     }
     if (name === 'quiz') {
       return `<tb-quiz><template data-role="spec">${escapeHtml(body ?? '')}</template></tb-quiz>\n`;

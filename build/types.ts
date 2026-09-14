@@ -48,6 +48,12 @@ export interface Chapter {
   readonly requires: readonly string[];
   /** Language version the chapter's code assumes, e.g. "java21". */
   readonly standard: string;
+  /**
+   * Which course this chapter belongs to. BC contains AB, so `ab` means both
+   * audiences read it and `bc` means only BC readers do. Every chapter must
+   * declare one: a missing scope would quietly show series to an AB reader.
+   */
+  readonly scope: 'ab' | 'bc';
   readonly status: 'draft' | 'complete';
   readonly order: number;
   readonly headings: readonly Heading[];
