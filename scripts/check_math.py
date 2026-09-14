@@ -77,6 +77,24 @@ def numeric_disagreement(expr, var, tries: int = 40):
     return None
 
 
+def same_verdict(got, expected, var):
+    """
+    Classify whether `got` equals `expected`.
+
+    Subtracting is the usual route, but it breaks on infinities: a limit of oo
+    compared against oo gives oo - oo, which is nan, and nan is not zero — so
+    every correct infinite limit would be reported undecidable. Structural
+    equality is checked first for exactly that case.
+    """
+    if got == expected:
+        return "ok", None
+    if got in (oo, -oo) or expected in (oo, -oo):
+        # One side is infinite and they are not the same object, so they differ:
+        # oo vs -oo, or oo vs a finite value. Both are definite answers.
+        return "wrong", f"{got} is not {expected}"
+    return zero_verdict(got - expected, var)
+
+
 def zero_verdict(difference, var):
     """Classify `difference` as provably zero, provably not, or undecided."""
     simplified = simplify(difference)
@@ -133,12 +151,12 @@ def check(claim: dict) -> dict:
         elif kind == "limit":
             var = parse(claim["var"])
             got = limit(parse(claim["lhs"]), var, parse(claim["to"]))
-            status, detail = zero_verdict(got - parse(claim["rhs"]), None)
+            status, detail = same_verdict(got, parse(claim["rhs"]), None)
 
         elif kind == "sum":
             var = parse(claim["var"])
             got = summation(parse(claim["lhs"]), (var, parse(claim["lo"]), parse(claim["hi"])))
-            status, detail = zero_verdict(got - parse(claim["rhs"]), None)
+            status, detail = same_verdict(got, parse(claim["rhs"]), None)
 
         elif kind == "ident":
             lhs, rhs = parse(claim["lhs"]), parse(claim["rhs"])
