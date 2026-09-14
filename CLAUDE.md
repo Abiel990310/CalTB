@@ -17,10 +17,17 @@ There is no compiler here, so the equivalent machine had to be built — **SymPy
 checking every worked result**. That part is done, and it is what lets this book
 honour the family's rule at all.
 
-Its grading counterpart is built too: **symbolic equivalence grading**, so a
-reader's answer is judged by what it means rather than how it is spelled. Three
-different-looking antiderivatives of sin·cos are all accepted, because the
-grader compares derivatives rather than expressions.
+Its grading counterpart is built too, and it exists **twice**.
+`scripts/grade_answer.py` decides equivalence symbolically with SymPy and is
+the authority. `src/lib/answer.ts` decides it numerically — two expressions are
+the same when they agree everywhere — because SymPy cannot run on a static page
+and the reader has to be graded by something. Three different-looking
+antiderivatives of sin·cos are accepted by both.
+
+Two graders means they can drift, and drift here is expensive: a reader told
+their correct answer is wrong stops believing every verdict, including the true
+ones. `verify:browser` runs every answer in the book through both and fails on
+one disagreement. When it fails, **the Python verdict is right by definition.**
 
 The third piece is that a calculus idea is often best shown by a graph the
 reader can *move*: drag *h* → 0 and watch the secant become the tangent. That
@@ -33,8 +40,16 @@ prose is checked by a program:
 
 ```bash
 npm run setup      # installs SymPy, once
-npm run verify     # self-test, then every claim in content/
+npm run verify     # self-tests, then every claim and every problem
 ```
+
+`npm run verify` is entirely a Node-and-Python affair, which is its one blind
+spot: it cannot see the page. `<tb-exercise>` was once emitted into every
+practice section with no custom element defining it — verified green, blank for
+readers. `scripts/smoke-browser.mjs` drives the built site in a real browser and
+catches exactly that. It is not in `verify` because it needs a Chromium, and a
+gate that cannot run everywhere gets skipped and then deleted. Run it by hand
+after touching a component, the exercise payload, or the build plumbing.
 
 A claim SymPy cannot decide comes back `unproved` and **fails the build**. That
 is deliberate: it does not mean the claim is false, it means the book would be

@@ -51,8 +51,8 @@ export function renderHome(book: Book, assets: Assets): string {
 
   const main = `<article class="prose prose--wide home">
     <section class="hero">
-      <h1>Java, all the way down</h1>
-      <p class="hero__lede">Every code sample on this site compiles and runs in your browser. Every idea that usually gets waved at &mdash; what the JVM actually does, why generics forget their types, what a stream is really doing &mdash; comes with a program you can change, and problems that check your answer by running it.</p>
+      <h1>Calculus you can check</h1>
+      <p class="hero__lede">Every derivative, integral and limit on this site has been verified by a computer algebra system before you read it &mdash; if a claim could not be proved, it is not here. The graphs move, the practice problems mark your answer by what it means rather than how you spelled it, and both AB and BC are covered in one book.</p>
       <div class="hero__actions">
         <a class="button button--primary" href="${startHref}">Start at the beginning</a>
         <a class="button" href="${url('practice/')}">Jump to problems</a>
@@ -65,18 +65,18 @@ export function renderHome(book: Book, assets: Assets): string {
       <h2>Three ways to read this</h2>
       <div class="paths__grid">
         <div class="path">
-          <h3>New to programming</h3>
-          <p>Read the early parts in order. They assume nothing: no JDK installed, no terminal experience, no maths beyond arithmetic.</p>
+          <h3>Taking AB</h3>
+          <p>Read it in order. Every chapter is tagged, and the ones marked BC are the extra material &mdash; skip those and what is left is the AB course entire.</p>
           <a href="${startHref}">Begin &rarr;</a>
         </div>
         <div class="path">
-          <h3>You know another language</h3>
-          <p>Skim the first part, then slow down where Java stops behaving like what you already know: references and equality, checked exceptions, and generics that are erased before they run.</p>
+          <h3>Taking BC</h3>
+          <p>BC is AB plus more, so this is one book rather than two. Read everything; the BC-only chapters are series, parametric and polar curves, and the harder integration techniques.</p>
           <a href="${secondHref}">Skip ahead &rarr;</a>
         </div>
         <div class="path">
           <h3>You want the problems</h3>
-          <p>The problem bank is filterable by topic and difficulty, and each problem compiles and tests your submission. Your progress is saved in this browser.</p>
+          <p>The problem bank is filterable by topic and difficulty. Answers are graded symbolically, so any correct form of an antiderivative is accepted. Your progress is saved in this browser.</p>
           <a href="${url('practice/')}">Open the bank &rarr;</a>
         </div>
       </div>
@@ -89,9 +89,9 @@ export function renderHome(book: Book, assets: Assets): string {
   </article>`;
 
   return shell({
-    title: `${book.title} — an interactive Java book`,
+    title: `${book.title} — an interactive, machine-checked calculus book`,
     description:
-      'An interactive Java textbook: runnable examples, diagrams of what the JVM is doing, and auto-graded practice problems, from first program to generics and concurrency.',
+      'An interactive AP Calculus AB/BC textbook: every result verified by a computer algebra system, graphs you can drag, and practice problems graded by meaning rather than by spelling.',
     main,
     book,
     assets,
@@ -153,7 +153,7 @@ export function renderPractice(book: Book, assets: Assets): string {
 
   return shell({
     title: `Practice problems · ${book.title}`,
-    description: 'Auto-graded Java practice problems, filterable by topic and difficulty.',
+    description: 'Auto-graded calculus practice, filterable by topic and difficulty.',
     main,
     book,
     assets,
@@ -169,7 +169,7 @@ export function renderExercisePage(book: Book, exercise: Exercise, assets: Asset
 
   return shell({
     title: `${exercise.title} · Practice · ${book.title}`,
-    description: `Java practice problem: ${exercise.title}`,
+    description: `Calculus practice problem: ${exercise.title}`,
     main,
     book,
     assets,
