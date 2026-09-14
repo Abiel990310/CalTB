@@ -10,10 +10,12 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "setup": "python3 -m pip install --quiet sympy",
-    "verify": "npm run typecheck && npm run verify:selftest && npm run verify:math",
+    "verify": "npm run typecheck && npm run verify:selftest && npm run verify:grading && npm run verify:math && npm run verify:problems",
     "verify:math": "node --no-warnings --experimental-strip-types scripts/verify-math.ts",
     "verify:selftest": "node --no-warnings --experimental-strip-types scripts/selftest-math.ts",
-    "math:latex": "node --no-warnings --experimental-strip-types scripts/build-math-latex.ts"
+    "math:latex": "node --no-warnings --experimental-strip-types scripts/build-math-latex.ts",
+    "verify:grading": "node --no-warnings --experimental-strip-types scripts/verify-grading.ts",
+    "verify:problems": "node --no-warnings --experimental-strip-types scripts/verify-exercises.ts"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",

@@ -3,9 +3,9 @@
 An interactive **AP Calculus AB/BC** textbook, in the same family as CppTB,
 JavaTB and CsaTB.
 
-**Seventeen chapters written, 168 claims checked.** Units 1, 2, 3, 4, 6, 7, 8
-and the BC parametric/polar unit are complete; unit 5 and the BC series unit
-have one chapter each and want more. The site engine,
+**Nineteen chapters written, 168 claims checked, 2 graded problems.** Units 1,
+2, 3, 4, 6, 7, 8 and the BC parametric/polar unit are complete; unit 5 has one
+chapter and the BC series unit has two, and both want more. The site engine,
 KaTeX typesetting and three graph presets (secant, riemann, taylor) are in
 place. `docs/ROADMAP.md` holds what is left; `docs/AUTHORING.md` documents how a
 claim is written and proved.
@@ -17,13 +17,14 @@ There is no compiler here, so the equivalent machine had to be built — **SymPy
 checking every worked result**. That part is done, and it is what lets this book
 honour the family's rule at all.
 
-What is still missing is the other half: **symbolic equivalence grading**, so a
-reader's answer is judged by what it means rather than how it is spelled. Until
-that exists there are no problems, only prose.
+Its grading counterpart is built too: **symbolic equivalence grading**, so a
+reader's answer is judged by what it means rather than how it is spelled. Three
+different-looking antiderivatives of sin·cos are all accepted, because the
+grader compares derivatives rather than expressions.
 
-The other half is that a calculus idea is often best shown by a graph the reader
-can *move*: drag *h* → 0 and watch the secant become the tangent. That widget is
-shared with PhysTB — build it once, in a portable shape.
+The third piece is that a calculus idea is often best shown by a graph the
+reader can *move*: drag *h* → 0 and watch the secant become the tangent. That
+widget is shared with PhysTB — build it once, in a portable shape.
 
 ## The one rule, restated for this book
 

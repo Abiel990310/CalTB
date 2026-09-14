@@ -172,6 +172,10 @@ limit applies and the constant comes out front.
 }
 :::
 
+## Practice
+
+:::exercise limits-by-hand
+
 :::recap
 - Substitute first. The result is either the answer, a non-existence, or
   $\tfrac{0}{0}$ telling you to work harder.

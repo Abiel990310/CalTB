@@ -157,6 +157,10 @@ Once the pattern is visible, these stop being separate problems.
 }
 :::
 
+## Practice
+
+:::exercise antiderivatives
+
 :::recap
 - Substitution is the chain rule backwards: $\int f(u)u'\,dx = F(u)$.
 - Look for a function and its own derivative in the same integrand.

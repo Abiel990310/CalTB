@@ -45,11 +45,13 @@ compiler to lean on.
       check. The checker has its own test (`verify:selftest`, 18 cases) that
       runs first — a change that stopped it catching false mathematics would
       otherwise look like a green build. See `docs/AUTHORING.md`.
-- [ ] **Symbolic answer grading.** A reader types `e^x(x-1)+C` and SymPy decides
-      equivalence to the reference, up to the constant of integration. String
-      matching is not acceptable here — a grader that rejects a correct answer
-      written differently is worse than no grader, because readers stop
-      believing it.
+- [x] **Symbolic answer grading.** Done 2026-09-14. `grade_answer.py` decides
+      equivalence symbolically, with three allowances: the constant of
+      integration (by comparing derivatives, so every correct antiderivative
+      passes), unsimplified form, and numeric tolerance for a decimal answer to
+      an exact question. Problems declare answers that must be accepted AND
+      rejected, and the verifier requires at least one rejection — a problem
+      that accepts everything is not a problem. 20-case grader self-test.
 - [x] **An interactive graph widget.** Done 2026-09-14. `:::graph` blocks, two
       kinds so far, deliberately preset rather than a general plotter — one
       preset that does a thing exactly right beats a configurable one that does
