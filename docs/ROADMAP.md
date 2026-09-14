@@ -75,7 +75,7 @@ To be confirmed against the CED. AB unless marked.
 - [x] 1 Limits and continuity
 - [x] 2 Differentiation: definition and basic rules
 - [x] 3 Differentiation: composite, implicit, and inverse functions
-- [~] 4 Contextual applications of differentiation — related rates done
+- [x] 4 Contextual applications of differentiation
 - [~] 5 Analytical applications of differentiation — extrema and shape done
 - [x] 6 Integration and accumulation of change
 - [x] 7 Differential equations
