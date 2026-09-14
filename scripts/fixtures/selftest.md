@@ -38,3 +38,15 @@ sum n=1..oo 1/n**2 = pi**2/7
 # expect: unproved
 asin(x) + acos(x) = pi/2
 ```
+
+An assumption the author declares, which the checker honours. Without the
+`assume` line this claim is false — a decay runs the other way when the rate
+constant is negative — so this is also a test that the declaration is actually
+being threaded through.
+
+```math verify
+# expect: ok
+# assume: b > 0
+lim t->oo (1 - exp(-b*t)) = 1
+lim t->oo exp(-b*t) = 0
+```
