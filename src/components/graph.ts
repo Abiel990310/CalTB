@@ -32,7 +32,7 @@ interface Control {
 }
 
 interface Spec {
-  readonly kind: 'secant' | 'riemann';
+  readonly kind: 'secant' | 'riemann' | 'taylor';
   readonly title?: string;
   readonly fn: string;
   readonly domain: readonly [number, number];
@@ -46,6 +46,14 @@ interface Spec {
   readonly rule?: 'left' | 'right' | 'midpoint' | 'trapezoid';
   /** riemann: the exact value, so the error can be shown honestly. */
   readonly exact?: number;
+  /**
+   * taylor: the coefficients of the series about `center`, lowest power first,
+   * given by the author rather than computed. Differentiating symbolically in
+   * the browser would mean shipping a CAS; the coefficients are short, and
+   * SymPy has already checked the series in the chapter's own claims.
+   */
+  readonly terms?: readonly number[];
+  readonly center?: number;
 }
 
 const PAD = { left: 46, right: 14, top: 14, bottom: 30 };
@@ -219,6 +227,66 @@ export class TbGraph extends HTMLElement {
     ctx.stroke();
 
     if (this.#spec.kind === 'secant') this.#drawSecant(ctx, px, py, mark, ink);
+    if (this.#spec.kind === 'taylor') this.#drawTaylor(ctx, px, py, mark);
+  }
+
+  /**
+   * The partial sum of a Taylor series, drawn over the function it approximates.
+   *
+   * The point is not that it fits — it is where it *stops* fitting. Adding terms
+   * tightens the hug near the centre and does nothing at all beyond the radius
+   * of convergence, which is a fact students take on trust until they watch it.
+   */
+  #drawTaylor(
+    ctx: CanvasRenderingContext2D,
+    px: (x: number) => number,
+    py: (y: number) => number,
+    mark: string,
+  ): void {
+    const terms = this.#spec.terms ?? [];
+    const centre = this.#spec.center ?? 0;
+    const n = Math.max(0, Math.min(terms.length - 1, Math.round(this.#values.get('terms') ?? 0)));
+    const [x0, x1] = this.#spec.domain;
+
+    const partial = (x: number): number => {
+      let total = 0;
+      let power = 1;
+      for (let i = 0; i <= n; ++i) {
+        total += terms[i] * power;
+        power *= x - centre;
+      }
+      return total;
+    };
+
+    ctx.strokeStyle = mark;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    let drawing = false;
+    for (let i = 0; i <= 720; ++i) {
+      const x = x0 + ((x1 - x0) * i) / 720;
+      const y = partial(x);
+      if (!Number.isFinite(y)) { drawing = false; continue; }
+      if (drawing) ctx.lineTo(px(x), py(y));
+      else { ctx.moveTo(px(x), py(y)); drawing = true; }
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Worst error over the visible domain: the honest summary of the fit.
+    let worst = 0;
+    for (let i = 0; i <= 200; ++i) {
+      const x = x0 + ((x1 - x0) * i) / 200;
+      const truth = sample(this.#fn, x);
+      const approx = partial(x);
+      if (Number.isNaN(truth) || !Number.isFinite(approx)) continue;
+      worst = Math.max(worst, Math.abs(truth - approx));
+    }
+
+    this.#readout.innerHTML =
+      `<span class="graph__stat">degree</span> <strong>${n}</strong> ` +
+      `<span class="graph__stat">· worst error shown</span> ` +
+      `<strong>${worst < 1e-6 ? worst.toExponential(1) : worst.toFixed(4)}</strong>`;
   }
 
   #drawSecant(

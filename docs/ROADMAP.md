@@ -57,8 +57,8 @@ compiler to lean on.
       - [x] `secant` — drag *h* → 0 and watch the slope settle
       - [x] `riemann` — drag *n*, toggle left / right / midpoint / trapezoid,
             with the error against the exact value when the spec gives one
-      - [ ] `taylor` — add terms, watch it hug the curve then fail outside the
-            radius of convergence
+      - [x] `taylor` — add terms, watch it hug the curve then fly off at the
+            edges, with the worst error over the window reported honestly
       - [ ] `slopefield` — a draggable initial condition tracing its solution
 - [ ] **MCQ and free-response problem shapes.** The quiz widget ports from
       JavaTB unchanged, including the rule that every wrong option needs a
