@@ -23,6 +23,7 @@ interface Part {
   reference: string;
   mode: string;
   variable: string;
+  positive: string;
   accept: string[];
   reject: string[];
 }
@@ -80,6 +81,7 @@ async function collect(): Promise<{ parts: Part[]; bad: string[] }> {
         reference,
         mode: field(body, 'mode') ?? 'expression',
         variable: field(body, 'variable') ?? 'x',
+        positive: field(body, 'positive') ?? '',
         accept: [reference, ...accept],   // the reference must grade itself correct
         reject,
       });
@@ -115,8 +117,8 @@ if (parts.length === 0 && bad.length === 0) {
 }
 
 const items = parts.flatMap((p) => [
-  ...p.accept.map((given) => ({ given, reference: p.reference, mode: p.mode, var: p.variable })),
-  ...p.reject.map((given) => ({ given, reference: p.reference, mode: p.mode, var: p.variable })),
+  ...p.accept.map((given) => ({ given, reference: p.reference, mode: p.mode, var: p.variable, positive: p.positive })),
+  ...p.reject.map((given) => ({ given, reference: p.reference, mode: p.mode, var: p.variable, positive: p.positive })),
 ]);
 
 const graded = await gradeAll(items);

@@ -61,6 +61,7 @@ function exercisePayload(e: Exercise) {
       reference: p.reference,
       mode: p.mode,
       variable: p.variable,
+      positive: p.positive,
     })),
     hints: e.hints,
     solutionNotesHtml: e.solutionNotesHtml,

@@ -129,6 +129,7 @@ function parseAnswerParts(body: string): AnswerPart[] {
       reference,
       mode: field(block, 'mode') === 'antiderivative' ? 'antiderivative' : 'expression',
       variable: field(block, 'variable') ?? 'x',
+      positive: field(block, 'positive') ?? '',
       accept: list(block, 'accept'),
       reject: list(block, 'reject'),
     });

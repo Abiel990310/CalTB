@@ -413,7 +413,13 @@ interface Sampled {
  * a real hole: `g*h` and `g**2` agree at every point where g and h happen to be
  * equal, so a sampler that set them equal would accept one for the other.
  */
-function sample(given: Expr, reference: Expr, variables: string[], mode: Mode): Sampled {
+function sample(
+  given: Expr,
+  reference: Expr,
+  variables: string[],
+  mode: Mode,
+  positive: ReadonlySet<string>,
+): Sampled {
   const xs: number[] = [];
   const g: number[] = [];
   const r: number[] = [];
@@ -428,7 +434,12 @@ function sample(given: Expr, reference: Expr, variables: string[], mode: Mode): 
     variables.forEach((name, j) => {
       // A different stride per variable, coprime with the sample count, so no
       // two variables ever trace the same path through the list.
-      env[name] = SAMPLES[(i + j * 5) % SAMPLES.length];
+      const value = SAMPLES[(i + j * 5) % SAMPLES.length];
+      // A quantity the problem declares positive is only ever sampled positive.
+      // Without this, sqrt(d**2*k/m) and d*sqrt(k/m) differ — correctly, since
+      // the first is |d|*sqrt(k/m) — and a reader who cancelled the square on a
+      // compression distance would be marked wrong.
+      env[name] = positive.has(name) ? Math.abs(value) : value;
     });
     const gv = evaluate(given, env);
     const rv = evaluate(reference, env);
@@ -448,6 +459,7 @@ export function compare(
   reference: Expr,
   variable: string,
   mode: Mode,
+  positive: ReadonlySet<string> = new Set(),
 ): Verdict {
   const variables = splitVariables(variable);
   const free = new Set([...given.vars, ...reference.vars]);
@@ -470,7 +482,7 @@ export function compare(
     return { correct: false, detail: `that comes to ${format(gv)}` };
   }
 
-  const s = sample(given, reference, variables, mode);
+  const s = sample(given, reference, variables, mode, positive);
   if (s.xs.length < 4) {
     return {
       correct: false,
@@ -534,6 +546,7 @@ export function grade(
   referenceText: string,
   mode: Mode = 'expression',
   variable = 'x',
+  positiveSpec = '',
 ): Verdict {
   const declared = new Set(splitVariables(variable));
 
@@ -554,7 +567,10 @@ export function grade(
   }
 
   try {
-    return compare(given, reference, variable, mode);
+    // splitVariables defaults to ["x"] for an empty spec, which would wrongly
+    // declare x positive on every problem that names no positive quantities.
+    const positive = new Set(positiveSpec.trim() ? splitVariables(positiveSpec) : []);
+    return compare(given, reference, variable, mode, positive);
   } catch {
     return { correct: false, detail: 'I could not evaluate that' };
   }

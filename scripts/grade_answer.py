@@ -100,8 +100,13 @@ def grade(item: dict) -> dict:
         # v*0, which is ZERO. Initial velocity is the most common symbol in a
         # physics problem, and without this an answer of `v0 + a*t` would be
         # silently graded as `a*t`, and a reference of `v0` as nothing at all.
-        given = parse(item["given"], declared=declared)
-        reference = parse(item["reference"], declared=declared)
+        # A physical quantity is positive, and saying so is the author's job,
+        # not something the grader may assume. It matters: sqrt(d**2*k/m) is
+        # |d|*sqrt(k/m), so without knowing d > 0 SymPy is right to refuse a
+        # reader who cancelled the square. A compression distance is positive.
+        positive = names_in(item.get("positive", ""))
+        given = parse(item["given"], positive=positive, declared=declared)
+        reference = parse(item["reference"], positive=positive, declared=declared)
         ok, detail = equivalent(given, reference, var, item.get("mode", "expression"))
         return {**item, "correct": ok, "detail": detail}
     except Exception as exc:

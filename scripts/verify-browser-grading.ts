@@ -31,6 +31,7 @@ interface Case {
   readonly reference: string;
   readonly mode: Mode;
   readonly variable: string;
+  readonly positive: string;
 }
 
 function field(body: string, name: string): string | null {
@@ -66,6 +67,7 @@ async function fromFixture(): Promise<Case[]> {
         // different question from the one SymPy was asked, and every
         // multi-variable case would "disagree" for no reason.
         variable: variables || 'x',
+        positive: '',
       };
     });
 }
@@ -80,9 +82,10 @@ async function fromProblems(): Promise<Case[]> {
       if (!reference) continue;
       const mode = (field(body, 'mode') ?? 'expression') as Mode;
       const variable = field(body, 'variable') ?? 'x';
+      const positive = field(body, 'positive') ?? '';
       const where = `${id}  ${field(body, 'prompt') ?? ''}`;
       for (const given of [reference, ...list(body, 'accept'), ...list(body, 'reject')]) {
-        out.push({ where, given, reference, mode, variable });
+        out.push({ where, given, reference, mode, variable, positive });
       }
     }
   }
@@ -104,7 +107,10 @@ function askPython(cases: Case[]): Promise<Array<{ correct: boolean; detail: str
       resolve(JSON.parse(out));
     });
     py.stdin.end(JSON.stringify(
-      cases.map((c) => ({ given: c.given, reference: c.reference, mode: c.mode, var: c.variable })),
+      cases.map((c) => ({
+        given: c.given, reference: c.reference, mode: c.mode,
+        var: c.variable, positive: c.positive,
+      })),
     ));
   });
 }
@@ -116,7 +122,7 @@ let mismatches = 0;
 
 cases.forEach((c, i) => {
   const python = authoritative[i].correct;
-  const browser = grade(c.given, c.reference, c.mode, c.variable);
+  const browser = grade(c.given, c.reference, c.mode, c.variable, c.positive);
   if (python === browser.correct) return;
 
   mismatches++;

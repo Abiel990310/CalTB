@@ -26,6 +26,7 @@ interface Part {
   reference: string;
   mode: Mode;
   variable: string;
+  positive: string;
 }
 
 interface Problem {
@@ -156,7 +157,7 @@ export class TbExercise extends HTMLElement {
     const check = () => {
       const typed = input.value.trim();
       if (!typed) return;
-      const result = grade(typed, part.reference, part.mode, part.variable);
+      const result = grade(typed, part.reference, part.mode, part.variable, part.positive);
       show(result);
     };
 

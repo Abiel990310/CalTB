@@ -86,6 +86,8 @@ export interface AnswerPart {
   readonly reference: string;
   readonly mode: 'expression' | 'antiderivative';
   readonly variable: string;
+  /** Variables the problem declares positive: masses, lengths, spring constants. */
+  readonly positive: string;
   readonly accept: readonly string[];
   readonly reject: readonly string[];
 }
