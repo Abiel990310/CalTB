@@ -80,7 +80,7 @@ To be confirmed against the CED. AB unless marked.
 - [x] 6 Integration and accumulation of change
 - [x] 7 Differential equations
 - [x] 8 Applications of integration
-- [ ] 9 Parametric, polar, and vector-valued functions — **BC**
+- [x] 9 Parametric, polar, and vector-valued functions — **BC**
 - [~] 10 Infinite sequences and series — **BC** — convergence and Taylor done
 
 ## Rules specific to this book

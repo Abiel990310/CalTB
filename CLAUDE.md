@@ -3,8 +3,9 @@
 An interactive **AP Calculus AB/BC** textbook, in the same family as CppTB,
 JavaTB and CsaTB.
 
-**Fifteen chapters written, 151 claims checked.** Units 1, 2, 3, 6, 7 and 8
-are complete; 4, 5 and the BC series unit are partly done. The site engine,
+**Sixteen chapters written, 161 claims checked.** Units 1, 2, 3, 6, 7, 8 and
+the BC parametric/polar unit are complete; 4, 5 and the BC series unit are
+partly done. The site engine,
 KaTeX typesetting and three graph presets (secant, riemann, taylor) are in
 place. `docs/ROADMAP.md` holds what is left; `docs/AUTHORING.md` documents how a
 claim is written and proved.
