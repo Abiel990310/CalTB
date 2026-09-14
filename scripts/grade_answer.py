@@ -72,11 +72,36 @@ def equivalent(given, reference, var, mode: str) -> tuple[bool, str]:
     return False, f"not equivalent — the difference simplifies to {simplify(difference)}"
 
 
+def names_in(spec: str) -> list[str]:
+    """The variable names a problem declares, from its `variable:` field."""
+    return [n for n in spec.replace(",", " ").split() if n]
+
+
+def first_variable(spec: str):
+    """The variable to differentiate against, from a `variable:` field.
+
+    Physics problems name several — "in terms of g and h" is written
+    `variable: g h` — but only antiderivative mode needs to pick one, and it is
+    the first. Plain equivalence needs none: subtracting two expressions and
+    simplifying settles it however many symbols they contain.
+    """
+    names = [n for n in spec.replace(",", " ").split() if n]
+    return parse(names[0] if names else "x")
+
+
 def grade(item: dict) -> dict:
     try:
-        var = parse(item.get("var", "x"))
-        given = parse(item["given"])
-        reference = parse(item["reference"])
+        spec = item.get("var", "x")
+        declared = names_in(spec)
+        var = first_variable(spec)
+        # Declaring the names matters more than it looks. SymPy splits any
+        # multi-letter symbol it does not know into single-letter factors, so
+        # `xy` becomes x*y — which is what a reader means — but `v0` becomes
+        # v*0, which is ZERO. Initial velocity is the most common symbol in a
+        # physics problem, and without this an answer of `v0 + a*t` would be
+        # silently graded as `a*t`, and a reference of `v0` as nothing at all.
+        given = parse(item["given"], declared=declared)
+        reference = parse(item["reference"], declared=declared)
         ok, detail = equivalent(given, reference, var, item.get("mode", "expression"))
         return {**item, "correct": ok, "detail": detail}
     except Exception as exc:

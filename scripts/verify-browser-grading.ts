@@ -55,13 +55,17 @@ async function fromFixture(): Promise<Case[]> {
     .map((l) => l.trim())
     .filter((l) => l && !l.startsWith('#'))
     .map((line) => {
-      const [reference, mode, , given] = line.split('|').map((s) => s.trim());
+      const [reference, mode, , given, variables] = line.split('|').map((s) => s.trim());
       return {
         where: 'fixture',
         given,
         reference,
         mode: mode as Mode,
-        variable: 'x',
+        // The fifth column is optional and names the variables; a calculus
+        // problem has only x. Dropping it here would hand the browser grader a
+        // different question from the one SymPy was asked, and every
+        // multi-variable case would "disagree" for no reason.
+        variable: variables || 'x',
       };
     });
 }

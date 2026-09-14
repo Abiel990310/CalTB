@@ -138,6 +138,23 @@ function tokenise(src: string): Tok[] {
   return out;
 }
 
+/** Rewrite each unfamiliar multi-letter name as the product SymPy reads it as. */
+function expandNames(toks: Tok[], declared: ReadonlySet<string>): Tok[] {
+  const out: Tok[] = [];
+  for (let i = 0; i < toks.length; i++) {
+    const tok = toks[i];
+    // A name immediately followed by `(` is a function call; leave it alone,
+    // whatever it is called, so an unknown one reports itself rather than
+    // dissolving into letters.
+    if (tok.k !== 'name' || toks[i + 1]?.k === '(') {
+      out.push(tok);
+      continue;
+    }
+    for (const piece of splitName(tok.v, declared)) out.push({ k: 'name', v: piece });
+  }
+  return out;
+}
+
 /**
  * Insert the multiplications readers leave out.
  *
@@ -180,11 +197,35 @@ export interface Expr {
   readonly vars: ReadonlySet<string>;
 }
 
+/**
+ * Split a name SymPy would split.
+ *
+ * SymPy's implicit-multiplication parser breaks any multi-character symbol it
+ * has not been told about into single-letter factors, so `xy` is x·y and `2gh`
+ * is 2gh — which is what a reader writing physics means. This grader has to do
+ * the same or the two would disagree on ordinary answers.
+ *
+ * A declared name is never split, and that is not a nicety: SymPy turns `v0`
+ * into v·0, which is the number zero. Initial velocity is the most common
+ * symbol in a mechanics problem, so every name a problem declares is kept whole
+ * on both sides.
+ */
+function splitName(name: string, declared: ReadonlySet<string>): string[] {
+  if (declared.has(name) || name.length === 1) return [name];
+  if (name.toLowerCase() in CONSTANTS || name.toLowerCase() in FUNCTIONS) return [name];
+  // Only all-letter names split. A name with a digit in it is a subscript the
+  // reader meant as one symbol — v0, x0, R1 — and a problem that uses one is
+  // expected to declare it. Left whole, an undeclared one is reported as an
+  // unknown name, which is a far better verdict than quietly becoming a digit.
+  if (!/^[A-Za-z]+$/.test(name)) return [name];
+  return [...name];
+}
+
 /** Shunting-yard, producing a tree. */
-export function parse(src: string): Expr {
+export function parse(src: string, declared: ReadonlySet<string> = new Set()): Expr {
   if (!src.trim()) throw new ParseError('nothing to grade — the box is empty');
 
-  const toks = addImplicitProducts(tokenise(src));
+  const toks = addImplicitProducts(expandNames(tokenise(src), declared));
   const values: Node[] = [];
   const ops: Array<{ v: string; kind: 'op' | 'fn' | 'paren'; argc?: number }> = [];
   const vars = new Set<string>();
@@ -364,7 +405,15 @@ interface Sampled {
   readonly reference: number[];
 }
 
-function sample(given: Expr, reference: Expr, variable: string, mode: Mode): Sampled {
+/**
+ * Evaluate both sides at a spread of points.
+ *
+ * With more than one variable — `sqrt(2*g*h)`, say — each is walked through the
+ * sample list from a *different* starting offset. Moving them together would be
+ * a real hole: `g*h` and `g**2` agree at every point where g and h happen to be
+ * equal, so a sampler that set them equal would accept one for the other.
+ */
+function sample(given: Expr, reference: Expr, variables: string[], mode: Mode): Sampled {
   const xs: number[] = [];
   const g: number[] = [];
   const r: number[] = [];
@@ -374,15 +423,20 @@ function sample(given: Expr, reference: Expr, variable: string, mode: Mode): Sam
   // absorbs whatever difference remains, which comes to the same thing.
   const extra: Record<string, number> = mode === 'antiderivative' ? { C: 0 } : {};
 
-  for (const x of SAMPLES) {
-    const env = { ...extra, [variable]: x };
+  for (let i = 0; i < SAMPLES.length; i++) {
+    const env: Record<string, number> = { ...extra };
+    variables.forEach((name, j) => {
+      // A different stride per variable, coprime with the sample count, so no
+      // two variables ever trace the same path through the list.
+      env[name] = SAMPLES[(i + j * 5) % SAMPLES.length];
+    });
     const gv = evaluate(given, env);
     const rv = evaluate(reference, env);
     // Skip points outside either domain — log of a negative, a division by
     // zero. A point one of them cannot reach proves nothing about the other.
     if (Number.isNaN(gv) || Number.isNaN(rv)) continue;
     if (!Number.isFinite(rv) || !Number.isFinite(gv)) continue;
-    xs.push(x);
+    xs.push(env[variables[0]]);
     g.push(gv);
     r.push(rv);
   }
@@ -395,8 +449,9 @@ export function compare(
   variable: string,
   mode: Mode,
 ): Verdict {
+  const variables = splitVariables(variable);
   const free = new Set([...given.vars, ...reference.vars]);
-  free.delete(variable);
+  for (const v of variables) free.delete(v);
   if (mode === 'antiderivative') free.delete('C');
 
   if (free.size > 0) {
@@ -404,7 +459,8 @@ export function compare(
     return { correct: false, detail: `I do not know what ${names} is here` };
   }
 
-  const constantOnly = !given.vars.has(variable) && !reference.vars.has(variable);
+  const used = variables.some((v) => given.vars.has(v) || reference.vars.has(v));
+  const constantOnly = !used;
 
   if (constantOnly) {
     const gv = evaluate(given, {});
@@ -414,7 +470,7 @@ export function compare(
     return { correct: false, detail: `that comes to ${format(gv)}` };
   }
 
-  const s = sample(given, reference, variable, mode);
+  const s = sample(given, reference, variables, mode);
   if (s.xs.length < 4) {
     return {
       correct: false,
@@ -448,9 +504,22 @@ export function compare(
   if (bad === -1) return { correct: true, detail: 'equivalent' };
   return {
     correct: false,
-    detail: `at ${variable} = ${format(s.xs[bad])} that gives ${format(s.given[bad])}, ` +
+    detail: `at ${variables[0]} = ${format(s.xs[bad])} that gives ${format(s.given[bad])}, ` +
             `which is not the value of the answer`,
   };
+}
+
+/**
+ * A problem's variables, written as one string.
+ *
+ * Calculus problems name one; a physics problem asking for a result "in terms
+ * of g and h" names several, and they are listed as `variable: g h` or
+ * `variable: g, h`. The first one named is the one differentiated against in
+ * antiderivative mode.
+ */
+export function splitVariables(spec: string): string[] {
+  const names = spec.split(/[\s,]+/).filter(Boolean);
+  return names.length ? names : ['x'];
 }
 
 function format(v: number): string {
@@ -466,9 +535,11 @@ export function grade(
   mode: Mode = 'expression',
   variable = 'x',
 ): Verdict {
+  const declared = new Set(splitVariables(variable));
+
   let reference: Expr;
   try {
-    reference = parse(referenceText);
+    reference = parse(referenceText, declared);
   } catch (err) {
     // The reference comes from the book, so this is the book's bug, not the
     // reader's. Say so rather than blaming them.
@@ -477,7 +548,7 @@ export function grade(
 
   let given: Expr;
   try {
-    given = parse(givenText);
+    given = parse(givenText, declared);
   } catch (err) {
     return { correct: false, detail: (err as Error).message };
   }

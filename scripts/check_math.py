@@ -31,9 +31,17 @@ from sympy.parsing.sympy_parser import (
     parse_expr,
     standard_transformations,
     implicit_multiplication_application,
+    convert_xor,
 )
 
-TRANSFORMS = standard_transformations + (implicit_multiplication_application,)
+# `convert_xor` makes `^` mean exponentiation. Without it Python's meaning wins
+# and `x^2` is a bitwise XOR, which is not a mistake anyone would catch by
+# reading: `a*t^2/2` parses without error and means something else entirely.
+# Every reader who types `^` means a power, and so does every author.
+TRANSFORMS = standard_transformations + (
+    implicit_multiplication_application,
+    convert_xor,
+)
 
 # Names an author may use without declaring them.
 LOCALS = {
@@ -64,7 +72,7 @@ for _name in ("Q", "E", "I", "N", "S", "O"):
     LOCALS[_name] = Symbol(_name)
 
 
-def parse(text: str, positive=()):
+def parse(text: str, positive=(), declared=()):
     """
     Parse an expression, optionally with symbols declared positive.
 
@@ -76,6 +84,12 @@ def parse(text: str, positive=()):
     names = {**LOCALS}
     for name in positive:
         names[name] = Symbol(name, positive=True)
+    # Anything the caller declares is kept whole. Without this, SymPy's implicit
+    # multiplication splits an unfamiliar multi-character name into single-letter
+    # factors: `xy` becomes x*y, which is usually what was meant, but `v0`
+    # becomes v*0 — the number zero — and nothing downstream would notice.
+    for name in declared:
+        names.setdefault(name, Symbol(name))
     return parse_expr(text, local_dict=names, transformations=TRANSFORMS)
 
 

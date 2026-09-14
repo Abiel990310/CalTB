@@ -65,6 +65,37 @@ const cases: Array<[string, string, Mode, boolean]> = [
   ['3.14',          'pi',           'expression', false],
   ['3.14159265359', 'pi',           'expression', true],
   ['x**2/2 + 0.0001*x', 'x**2/2',   'antiderivative', false],
+];
+
+/**
+ * Answers in several variables, which is what a physics problem asks for.
+ *
+ * The `v0` cases are the important ones. SymPy splits any multi-character
+ * symbol it has not been told about into single letters, so `v0` parses as
+ * v times 0 — the number zero — unless the problem declares it. Initial
+ * velocity is the most common symbol in mechanics, and without the declaration
+ * `v0 + a*t` would be graded as `a*t` and nobody would ever see why.
+ *
+ * The rest guard the sampler: several variables must be walked through the
+ * sample points independently. If they moved together, `g*h` and `g**2` would
+ * agree everywhere and a wrong answer would pass.
+ */
+const multivariate: Array<[string, string, string, boolean]> = [
+  ['sqrt(2*g*h)',      'sqrt(2*g*h)',       'g h',     true],
+  ['sqrt(2gh)',        'sqrt(2*g*h)',       'g h',     true],
+  ['(2*g*h)^(1/2)',    'sqrt(2*g*h)',       'g h',     true],
+  ['sqrt(2*g*g)',      'sqrt(2*g*h)',       'g h',     false],
+  ['g*h',              'g^2',               'g h',     false],
+  ['g+h',              'h+g',               'g h',     true],
+  ['g+h',              '2*g',               'g h',     false],
+  ['m*v^2/2',          'v^2*m/2',           'm v',     true],
+  ['m*v^2',            'm*v^2/2',           'm v',     false],
+  ['G*M*m/r^2',        'G*M*m/r^2',         'G M m r', true],
+  ['G*M*m/r',          'G*M*m/r^2',         'G M m r', false],
+  ['v0 + a*t',         'a*t + v0',          'v0 a t',  true],
+  ['v0',               'a*t + v0',          'v0 a t',  false],
+  ['x0 + v0*t + a*t^2/2', 'a*t**2/2 + v0*t + x0', 'x0 v0 a t', true],
+  ['x0 + v0*t + a*t^2',   'a*t**2/2 + v0*t + x0', 'x0 v0 a t', false],
   ['',              'x',            'expression', false],
 ];
 let bad = 0;
@@ -75,10 +106,20 @@ for (const [g, r, m, want] of cases) {
   console.log(`  FAIL  "${g}" vs "${r}" [${m}]`);
   console.log(`        expected ${want ? 'accept' : 'reject'}, got ${v.correct ? 'accept' : 'reject'}: ${v.detail}`);
 }
+for (const [g, r, vars, want] of multivariate) {
+  const v = grade(g, r, 'expression', vars);
+  if (v.correct === want) continue;
+  bad++;
+  console.log(`  FAIL  "${g}" vs "${r}" [vars: ${vars}]`);
+  console.log(`        expected ${want ? 'accept' : 'reject'}, got ${v.correct ? 'accept' : 'reject'}: ${v.detail}`);
+}
+
+const total = cases.length + multivariate.length;
+
 if (bad === 0) {
-  console.log(`\nGrader self-test: ${cases.length} cases behave, including ` +
+  console.log(`\nGrader self-test: ${total} cases behave, including ` +
               `the near-misses designed to slip past a naive sampler.`);
   process.exit(0);
 }
-console.log(`\n${bad} of ${cases.length} cases are graded wrongly.`);
+console.log(`\n${bad} of ${total} cases are graded wrongly.`);
 process.exit(1);

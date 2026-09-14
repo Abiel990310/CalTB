@@ -18,6 +18,7 @@ interface Case {
   mode: string;
   expect: boolean;
   given: string;
+  variable: string;
 }
 
 const FIXTURE = join(process.cwd(), 'scripts', 'fixtures', 'grading.md');
@@ -35,7 +36,9 @@ for (const raw of lines) {
   if (!line || line.startsWith('#')) continue;
 
   const parts = line.split('|').map((p) => p.trim());
-  if (parts.length !== 4) {
+  // A fifth column names the variables, for answers in more than one. It is
+  // optional: a calculus problem has only x.
+  if (parts.length < 4 || parts.length > 5) {
     console.log(`  FAIL malformed fixture line: ${line}`);
     process.exit(1);
   }
@@ -44,6 +47,7 @@ for (const raw of lines) {
     mode: parts[1],
     expect: parts[2] === 'yes',
     given: parts[3],
+    variable: parts[4] || 'x',
   });
 }
 
@@ -66,7 +70,8 @@ const results = await new Promise<Array<Case & { correct: boolean; detail: strin
       if (code !== 0) return reject(new Error(err.trim() || `python exited ${code}`));
       resolve(JSON.parse(out));
     });
-    py.stdin.end(JSON.stringify(cases));
+    // The grader reads `var`; the fixture column is called `variable`.
+    py.stdin.end(JSON.stringify(cases.map((c) => ({ ...c, var: c.variable }))));
   },
 );
 
