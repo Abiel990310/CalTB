@@ -1,6 +1,9 @@
 import MarkdownIt from 'markdown-it';
 import anchor from 'markdown-it-anchor';
 import katexPlugin from '@vscode/markdown-it-katex';
+import katex from 'katex';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { createHighlighter, type Highlighter } from 'shiki';
 import type { Heading } from './types.ts';
 import { LANGUAGE } from './language.ts';
@@ -201,13 +204,13 @@ export async function createRenderer(): Promise<(src: string) => RenderResult> {
   // The package is CJS with a `default` wrapper, while its type declarations
   // describe a bare function. Both are true depending on how it is loaded, so
   // take whichever is actually callable rather than trusting either.
-  const katex = (
+  const katexMd = (
     typeof katexPlugin === 'function'
       ? katexPlugin
       : (katexPlugin as unknown as { default: typeof katexPlugin }).default
   ) as Parameters<MarkdownIt['use']>[0];
 
-  md.use(katex, {
+  md.use(katexMd, {
     throwOnError: true,
     strict: false,
     output: 'htmlAndMathml',
@@ -215,6 +218,54 @@ export async function createRenderer(): Promise<(src: string) => RenderResult> {
   md.use(containerPlugin);
 
   let headings: Heading[] = [];
+  /**
+   * `math verify` blocks are the chapter's mathematics, not its source code.
+   *
+   * They were rendering as a code fence full of SymPy syntax, which is exactly
+   * the plain-text-equation problem this book should not have. They now render
+   * as typeset display maths carrying a mark that says the build proved them —
+   * which is the single most distinctive thing about this book, and it was
+   * previously invisible to the reader.
+   *
+   * The LaTeX comes from `build/math-latex.json`, generated before the build by
+   * the same parse the checker uses, so the page cannot display one equation
+   * while the build verified another. A missing entry falls back to the plain
+   * source: visibly worse, never wrong.
+   */
+  const latexFor: Record<string, string> = (() => {
+    try {
+      const here = fileURLToPath(new URL('.', import.meta.url));
+      return JSON.parse(readFileSync(`${here}math-latex.json`, 'utf8')) as Record<string, string>;
+    } catch {
+      return {};
+    }
+  })();
+
+  /** Render one `math verify` block as typeset, visibly-checked mathematics. */
+  const renderProved = (content: string): string => {
+    const rows = content
+      .split('\n')
+      .map((line) => line.split('#')[0].trim())
+      .filter(Boolean)
+      .map((source) => {
+        const tex = latexFor[source];
+        const body = tex
+          ? katex.renderToString(tex, {
+              displayMode: true,
+              throwOnError: false,
+              output: 'htmlAndMathml',
+            })
+          : `<code>${escapeHtml(source)}</code>`;
+        return `<li class="proved__row">${body}</li>`;
+      })
+      .join('');
+
+    return `<figure class="proved">
+      <ul class="proved__list">${rows}</ul>
+      <figcaption class="proved__mark">checked by the build</figcaption>
+    </figure>\n`;
+  };
+
   md.use(anchor, {
     level: [2, 3],
     slugify: (s: string) =>
@@ -241,6 +292,12 @@ export async function createRenderer(): Promise<(src: string) => RenderResult> {
 
   md.renderer.rules.fence = (tokens, idx) => {
     const token = tokens[idx];
+
+    // Checked mathematics is typeset, not shown as source. This has to live
+    // here rather than in its own rule: markdown-it keeps one fence renderer,
+    // and this assignment replaces any earlier one.
+    if (token.info.trim() === 'math verify') return renderProved(token.content);
+
     const meta = parseFenceInfo(token.info);
     const { shown, full } = splitHidden(token.content);
     const highlighted = highlight(shown, meta.lang);

@@ -107,3 +107,34 @@
 
 /* A long equation scrolls inside its own box rather than widening the page. */
 .katex-display > .katex { text-align: center; }
+
+/* ---- Verified claims ---------------------------------------------------- */
+
+/* These are the chapter's mathematics AND its evidence, so they get a panel
+   that looks deliberate rather than a code block that looks like leftovers. */
+.proved {
+  margin: 24px 0;
+  padding: 6px 18px 10px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--pass);
+  border-radius: var(--radius);
+  background: var(--bg-raised);
+}
+
+.proved__list { list-style: none; margin: 0; padding: 0; }
+
+.proved__row { margin: 0; padding: 0; }
+.proved__row + .proved__row { border-top: 1px dashed var(--line); }
+.proved__row .katex-display { margin: 12px 0; }
+
+.proved__mark {
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pass);
+  font-weight: 650;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.proved__mark::before { content: "✓"; font-size: 0.95rem; }
