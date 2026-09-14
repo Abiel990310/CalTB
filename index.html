@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AP Calculus AB/BC — an interactive, machine-checked calculus book</title>
+  <meta name="description" content="An interactive AP Calculus AB/BC textbook: every result verified by a computer algebra system, graphs you can drag, and practice problems graded by meaning rather than by spelling.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="/CalTB/favicon.svg" type="image/svg+xml">
+  <script>(function(){try{var t=localStorage.getItem('tb-theme');if(!t){t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/CalTB/assets/index-BubbCOG9.css">
+</head>
+<body class="is-home">
+  <header class="topbar">
+  <button class="topbar__menu" id="menu-toggle" aria-label="Toggle contents" aria-expanded="false">
+    <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+  </button>
+  <a class="topbar__brand" href="/CalTB/">AP Calculus AB/BC</a>
+  <div class="topbar__spacer"></div>
+  <button class="search-trigger" id="search-trigger" aria-label="Search the book">
+    <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6" fill="none"/><path d="M13 13l4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span>Search</span><kbd>/</kbd>
+  </button>
+  <button class="icon-button" id="theme-toggle" aria-label="Switch theme" title="Switch theme">
+    <svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M10 2.5a7.5 7.5 0 1 0 7.5 7.5A6 6 0 0 1 10 2.5Z" fill="currentColor"/></svg>
+  </button>
+</header>
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Book contents">
+  <div class="sidebar__inner">
+    <a class="sidebar__link" href="/CalTB/">Start here</a>
+    <a class="sidebar__link" href="/CalTB/practice/">Practice problems</a>
+    <a class="sidebar__link" href="/CalTB/reference/">Quick reference</a>
+    <a class="sidebar__link" href="/CalTB/progress/">Progress</a>
+    <hr class="sidebar__rule">
+    <details class="nav__part"><summary><span class="nav__part-num">Part 1</span>Limits and Continuity</summary><ul class="nav__list"><li><a href="/CalTB/limits/what-a-limit-is/"><span class="nav__num">1.1</span><span class="nav__text">What a limit is</span></a></li><li><a href="/CalTB/limits/computing-limits/"><span class="nav__num">1.2</span><span class="nav__text">Computing limits</span></a></li><li><a href="/CalTB/limits/continuity/"><span class="nav__num">1.3</span><span class="nav__text">Continuity</span></a></li><li><a href="/CalTB/limits/limits-at-infinity/"><span class="nav__num">1.4</span><span class="nav__text">Limits at infinity</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 2</span>Differentiation: Definition and Fundamental Properties</summary><ul class="nav__list"><li><a href="/CalTB/differentiation/the-derivative-as-a-limit/"><span class="nav__num">2.1</span><span class="nav__text">The derivative</span></a></li><li><a href="/CalTB/differentiation/the-rules/"><span class="nav__num">2.2</span><span class="nav__text">The rules</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 3</span>Differentiation: Composite, Implicit, and Inverse Functions</summary><ul class="nav__list"><li><a href="/CalTB/composite-implicit-inverse/the-chain-rule/"><span class="nav__num">3.1</span><span class="nav__text">Chain rule</span></a></li><li><a href="/CalTB/composite-implicit-inverse/implicit-differentiation/"><span class="nav__num">3.2</span><span class="nav__text">Implicit</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 4</span>Contextual Applications of Differentiation</summary><ul class="nav__list"><li><a href="/CalTB/contextual-applications/related-rates/"><span class="nav__num">4.1</span><span class="nav__text">Related rates</span></a></li><li><a href="/CalTB/contextual-applications/motion-and-rates/"><span class="nav__num">4.2</span><span class="nav__text">Motion and rates</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 5</span>Analytical Applications of Differentiation</summary><ul class="nav__list"><li><a href="/CalTB/analytical-applications/extrema-and-shape/"><span class="nav__num">5.1</span><span class="nav__text">Extrema and shape</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 6</span>Integration and Accumulation of Change</summary><ul class="nav__list"><li><a href="/CalTB/integration/the-definite-integral/"><span class="nav__num">6.1</span><span class="nav__text">The definite integral</span></a></li><li><a href="/CalTB/integration/the-fundamental-theorem/"><span class="nav__num">6.2</span><span class="nav__text">The FTC</span></a></li><li><a href="/CalTB/integration/substitution/"><span class="nav__num">6.3</span><span class="nav__text">Substitution</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 7</span>Differential Equations</summary><ul class="nav__list"><li><a href="/CalTB/differential-equations/separable-equations/"><span class="nav__num">7.1</span><span class="nav__text">Differential equations</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 8</span>Applications of Integration</summary><ul class="nav__list"><li><a href="/CalTB/applications-of-integration/area-and-volume/"><span class="nav__num">8.1</span><span class="nav__text">Area and volume</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 9</span>Parametric Equations, Polar Coordinates, and Vector-Valued Functions</summary><ul class="nav__list"><li><a href="/CalTB/parametric-and-polar/parametric-and-polar/"><span class="nav__num">9.1</span><span class="nav__text">Parametric and polar</span></a></li></ul></details><details class="nav__part"><summary><span class="nav__part-num">Part 10</span>Infinite Sequences and Series</summary><ul class="nav__list"><li><a href="/CalTB/series/convergence/"><span class="nav__num">10.1</span><span class="nav__text">Convergence</span></a></li><li><a href="/CalTB/series/taylor-series/"><span class="nav__num">10.2</span><span class="nav__text">Taylor series</span></a></li></ul></details>
+  </div>
+</nav>
+    <main class="content" id="content">
+      <article class="prose prose--wide home">
+    <section class="hero">
+      <h1>Calculus you can check</h1>
+      <p class="hero__lede">Every derivative, integral and limit on this site has been verified by a computer algebra system before you read it &mdash; if a claim could not be proved, it is not here. The graphs move, the practice problems mark your answer by what it means rather than how you spelled it, and both AB and BC are covered in one book.</p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="/CalTB/limits/what-a-limit-is/">Start at the beginning</a>
+        <a class="button" href="/CalTB/practice/">Jump to problems</a>
+        <button class="button" id="resume-button" hidden>Resume where you left off</button>
+      </div>
+      <p class="hero__stats">19 chapters · 19 written · 2 problems</p>
+    </section>
+
+    <section class="paths">
+      <h2>Three ways to read this</h2>
+      <div class="paths__grid">
+        <div class="path">
+          <h3>Taking AB</h3>
+          <p>Read it in order. Every chapter is tagged, and the ones marked BC are the extra material &mdash; skip those and what is left is the AB course entire.</p>
+          <a href="/CalTB/limits/what-a-limit-is/">Begin &rarr;</a>
+        </div>
+        <div class="path">
+          <h3>Taking BC</h3>
+          <p>BC is AB plus more, so this is one book rather than two. Read everything; the BC-only chapters are series, parametric and polar curves, and the harder integration techniques.</p>
+          <a href="/CalTB/differentiation/the-derivative-as-a-limit/">Skip ahead &rarr;</a>
+        </div>
+        <div class="path">
+          <h3>You want the problems</h3>
+          <p>The problem bank is filterable by topic and difficulty. Answers are graded symbolically, so any correct form of an antiderivative is accepted. Your progress is saved in this browser.</p>
+          <a href="/CalTB/practice/">Open the bank &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="contents">
+      <h2>Contents</h2>
+      <ol class="toc"><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 1</span>
+          <h3><a href="/CalTB/limits/">Limits and Continuity</a></h3>
+          <p>Every idea in the course rests on the limit. This unit builds it carefully, because a shaky limit makes every derivative and integral that follows a rule to memorise instead of a thing to understand.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/limits/what-a-limit-is/"><span class="toc-num">1.1</span> What a limit is</a></li><li><a href="/CalTB/limits/computing-limits/"><span class="toc-num">1.2</span> Computing limits</a></li><li><a href="/CalTB/limits/continuity/"><span class="toc-num">1.3</span> Continuity</a></li><li><a href="/CalTB/limits/limits-at-infinity/"><span class="toc-num">1.4</span> Limits at infinity</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 2</span>
+          <h3><a href="/CalTB/differentiation/">Differentiation: Definition and Fundamental Properties</a></h3>
+          <p>The derivative defined as a limit, and the rules that follow from it — so that the rules are consequences rather than a list.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/differentiation/the-derivative-as-a-limit/"><span class="toc-num">2.1</span> The derivative</a></li><li><a href="/CalTB/differentiation/the-rules/"><span class="toc-num">2.2</span> The rules</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 3</span>
+          <h3><a href="/CalTB/composite-implicit-inverse/">Differentiation: Composite, Implicit, and Inverse Functions</a></h3>
+          <p>Differentiating things that are not written as y = f(x): compositions by the chain rule, implicit relations, and inverses.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/composite-implicit-inverse/the-chain-rule/"><span class="toc-num">3.1</span> Chain rule</a></li><li><a href="/CalTB/composite-implicit-inverse/implicit-differentiation/"><span class="toc-num">3.2</span> Implicit</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 4</span>
+          <h3><a href="/CalTB/contextual-applications/">Contextual Applications of Differentiation</a></h3>
+          <p>The derivative as a rate in a real situation — motion, related rates, linear approximation, and L'Hopital's rule.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/contextual-applications/related-rates/"><span class="toc-num">4.1</span> Related rates</a></li><li><a href="/CalTB/contextual-applications/motion-and-rates/"><span class="toc-num">4.2</span> Motion and rates</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 5</span>
+          <h3><a href="/CalTB/analytical-applications/">Analytical Applications of Differentiation</a></h3>
+          <p>What the derivative says about the shape of a graph: extrema, concavity, the mean value theorem, and optimisation.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/analytical-applications/extrema-and-shape/"><span class="toc-num">5.1</span> Extrema and shape</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 6</span>
+          <h3><a href="/CalTB/integration/">Integration and Accumulation of Change</a></h3>
+          <p>The integral as accumulated change, the Fundamental Theorem that ties it to the derivative, and the techniques for evaluating one.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/integration/the-definite-integral/"><span class="toc-num">6.1</span> The definite integral</a></li><li><a href="/CalTB/integration/the-fundamental-theorem/"><span class="toc-num">6.2</span> The FTC</a></li><li><a href="/CalTB/integration/substitution/"><span class="toc-num">6.3</span> Substitution</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 7</span>
+          <h3><a href="/CalTB/differential-equations/">Differential Equations</a></h3>
+          <p>Equations that describe a rate rather than a quantity, and the models — growth, decay, logistic — that come out of solving them.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/differential-equations/separable-equations/"><span class="toc-num">7.1</span> Differential equations</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 8</span>
+          <h3><a href="/CalTB/applications-of-integration/">Applications of Integration</a></h3>
+          <p>Average value, area between curves, volumes of revolution, and arc length: the integral put to work.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/applications-of-integration/area-and-volume/"><span class="toc-num">8.1</span> Area and volume</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 9</span>
+          <h3><a href="/CalTB/parametric-and-polar/">Parametric Equations, Polar Coordinates, and Vector-Valued Functions</a></h3>
+          <p>BC only. Curves that are not graphs of functions, and calculus done on them.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/parametric-and-polar/parametric-and-polar/"><span class="toc-num">9.1</span> Parametric and polar</a></li>
+        </ol>
+      </li><li class="toc-part">
+        <div class="toc-part__head">
+          <span class="toc-part__num">Part 10</span>
+          <h3><a href="/CalTB/series/">Infinite Sequences and Series</a></h3>
+          <p>BC only, and the largest single block on the BC exam. Convergence tests, power series, and Taylor series.</p>
+        </div>
+        <ol class="toc-part__chapters">
+          <li><a href="/CalTB/series/convergence/"><span class="toc-num">10.1</span> Convergence</a></li><li><a href="/CalTB/series/taylor-series/"><span class="toc-num">10.2</span> Taylor series</a></li>
+        </ol>
+      </li></ol>
+    </section>
+  </article>
+    </main>
+    <div class="rail" aria-hidden="true"></div>
+  </div>
+  <div class="scrim" id="scrim" hidden></div>
+  <script type="module" src="/CalTB/assets/index-BECzlglS.js"></script>
+</body>
+</html>
